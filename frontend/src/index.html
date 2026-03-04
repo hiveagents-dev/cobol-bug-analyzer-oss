@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COBOL Bug Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="brand-header">
+        <div class="brand-container">
+            <div class="logo-section">
+                <div class="logo">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="url(#gradient)" />
+                        <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <defs>
+                            <linearGradient id="gradient" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#007acc" />
+                                <stop offset="100%" stop-color="#17a2b8" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1 class="brand-name">COBOL Bug Analyzer</h1>
+                    <p class="brand-tagline">Legacy Code Modernization</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>🔍 COBOL Bug Analyzer</h1>
+            <p class="subtitle">Paste your COBOL code below for intelligent bug detection</p>
+        </header>
+
+        <main>
+            <!-- Performance Notice -->
+            <div class="info-banner">
+                <svg class="info-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clip-rule="evenodd" />
+                </svg>
+                <div class="info-content">
+                    <strong>Analysis Time:</strong> Analysis typically takes 2-3 minutes as we thoroughly examine your
+                    code.
+                    <span class="info-hint">Stay on this page while we process your request. We're working on an async
+                        notification system for future releases!</span>
+                </div>
+            </div>
+
+            <section class="editor-section">
+                <div class="editor-header">
+                    <label for="cobol-input">COBOL Source Code</label>
+                    <button id="clear-btn" class="secondary-btn">Clear</button>
+                </div>
+                <textarea id="cobol-input"
+                    placeholder="Paste your COBOL code here...&#10;&#10;Example:&#10;IDENTIFICATION DIVISION.&#10;PROGRAM-ID. EXAMPLE.&#10;&#10;DATA DIVISION.&#10;WORKING-STORAGE SECTION.&#10;01 WS-NUM PIC 9(5).&#10;&#10;PROCEDURE DIVISION.&#10;    DIVIDE 10 BY 0 GIVING WS-NUM.&#10;    STOP RUN."
+                    spellcheck="false"></textarea>
+            </section>
+
+            <div class="action-bar">
+                <button id="analyze-btn" class="primary-btn">
+                    <span class="btn-text">Analyze Code</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+
+            <section id="results-section" class="results-section hidden">
+                <div class="results-header">
+                    <h2>Analysis Results</h2>
+                    <div id="summary" class="summary"></div>
+                </div>
+                <div id="bugs-list" class="bugs-list"></div>
+            </section>
+
+            <div id="loading-spinner" class="loading-spinner hidden">
+                <div class="spinner"></div>
+                <p>Analyzing your COBOL code...</p>
+                <p class="loading-subtext">This may take 2-3 minutes. Please stay on this page.</p>
+            </div>
+
+            <div id="error-message" class="error-message hidden"></div>
+        </main>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section footer-brand">
+                <div class="footer-logo">
+                    <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="url(#footerGradient)" />
+                        <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <defs>
+                            <linearGradient id="footerGradient" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#007acc" />
+                                <stop offset="100%" stop-color="#17a2b8" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="footer-brand-name">COBOL Bug Analyzer</span>
+                </div>
+                <p class="footer-description">
+                    Open source AI-powered tool for legacy COBOL code analysis, bug detection and modernization.
+                </p>
+            </div>
+
+            <div class="footer-section footer-info">
+                <h3 class="footer-heading">About</h3>
+                <p class="footer-text">
+                    COBOL Bug Analyzer leverages advanced AI to help modernize and maintain legacy COBOL systems with
+                    confidence.
+                </p>
+                <div class="footer-tech">
+                    <span class="tech-badge">AI-Enhanced</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">
+                &copy; 2025 COBOL Bug Analyzer. MIT License.
+            </p>
+            <p class="footer-credits">
+                Built with ❤️ by <a href="https://www.hiveagents.dev" target="_blank" rel="noopener" class="footer-byline">Hive Agents</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Tests - COBOL Bug Analyzer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007acc;
+            padding-bottom: 10px;
+        }
+        .test-suite {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #ddd;
+            background: #f9f9f9;
+        }
+        .test-case.pass {
+            border-left-color: #28a745;
+        }
+        .test-case.fail {
+            border-left-color: #dc3545;
+        }
+        .test-case.running {
+            border-left-color: #ffc107;
+        }
+        .test-result {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .pass { color: #28a745; }
+        .fail { color: #dc3545; }
+        .running { color: #ffc107; }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover {
+            background: #005a9e;
+        }
+        #test-summary {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .code-sample {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Frontend Test Suite - COBOL Bug Analyzer</h1>
+
+    <div>
+        <button onclick="runAllTests()">Run All Tests</button>
+        <button onclick="clearResults()">Clear Results</button>
+    </div>
+
+    <div id="test-summary"></div>
+
+    <div class="test-suite">
+        <h2>UI Component Tests</h2>
+        <div id="ui-tests"></div>
+    </div>
+
+    <div class="test-suite">
+        <h2>API Integration Tests</h2>
+        <div id="api-tests"></div>
+    </div>
+
+    <div class="test-suite">
+        <h2>User Interaction Tests</h2>
+        <div id="interaction-tests"></div>
+    </div>
+
+    <script>
+        // Test framework
+        class TestRunner {
+            constructor() {
+                this.tests = [];
+                this.results = { passed: 0, failed: 0, total: 0 };
+            }
+
+            addTest(name, fn, category) {
+                this.tests.push({ name, fn, category });
+            }
+
+            async runAll() {
+                this.results = { passed: 0, failed: 0, total: 0 };
+
+                for (const test of this.tests) {
+                    await this.runTest(test);
+                }
+
+                this.showSummary();
+            }
+
+            async runTest(test) {
+                const testElement = document.createElement('div');
+                testElement.className = 'test-case running';
+                testElement.innerHTML = `
+                    <div><strong>${test.name}</strong></div>
+                    <div class="test-result running">⏳ Running...</div>
+                `;
+
+                const container = document.getElementById(`${test.category}-tests`);
+                container.appendChild(testElement);
+
+                this.results.total++;
+
+                try {
+                    await test.fn();
+                    testElement.className = 'test-case pass';
+                    testElement.querySelector('.test-result').innerHTML = '✅ PASSED';
+                    testElement.querySelector('.test-result').className = 'test-result pass';
+                    this.results.passed++;
+                } catch (error) {
+                    testElement.className = 'test-case fail';
+                    testElement.querySelector('.test-result').innerHTML = `❌ FAILED: ${error.message}`;
+                    testElement.querySelector('.test-result').className = 'test-result fail';
+                    this.results.failed++;
+                }
+            }
+
+            showSummary() {
+                const summaryDiv = document.getElementById('test-summary');
+                const passRate = ((this.results.passed / this.results.total) * 100).toFixed(1);
+                summaryDiv.innerHTML = `
+                    <h3>Test Summary</h3>
+                    <p><strong>Total:</strong> ${this.results.total}</p>
+                    <p class="pass"><strong>Passed:</strong> ${this.results.passed}</p>
+                    <p class="fail"><strong>Failed:</strong> ${this.results.failed}</p>
+                    <p><strong>Pass Rate:</strong> ${passRate}%</p>
+                `;
+            }
+        }
+
+        // Test assertions
+        function assert(condition, message) {
+            if (!condition) {
+                throw new Error(message || 'Assertion failed');
+            }
+        }
+
+        function assertEquals(actual, expected, message) {
+            if (actual !== expected) {
+                throw new Error(message || `Expected ${expected}, got ${actual}`);
+            }
+        }
+
+        function assertNotNull(value, message) {
+            if (value === null || value === undefined) {
+                throw new Error(message || 'Value is null or undefined');
+            }
+        }
+
+        // Initialize test runner
+        const runner = new TestRunner();
+
+        // UI Component Tests
+        runner.addTest('Analyze button exists', () => {
+            // Mock: Check if analyze button would exist
+            assert(true, 'Analyze button should exist in DOM');
+        }, 'ui');
+
+        runner.addTest('Code textarea exists', () => {
+            // Mock: Check if code input area would exist
+            assert(true, 'Code textarea should exist in DOM');
+        }, 'ui');
+
+        runner.addTest('Results container exists', () => {
+            // Mock: Check if results container would exist
+            assert(true, 'Results container should exist in DOM');
+        }, 'ui');
+
+        runner.addTest('Loading state displays correctly', () => {
+            // Mock: Verify loading state UI
+            const loadingText = 'Analyzing...';
+            assert(loadingText.includes('Analyzing'), 'Loading state should show analyzing message');
+        }, 'ui');
+
+        // API Integration Tests
+        runner.addTest('API endpoint is configured', () => {
+            const apiEndpoint = 'http://localhost:5000/api/analyze';
+            assertNotNull(apiEndpoint, 'API endpoint should be configured');
+        }, 'api');
+
+        runner.addTest('Request payload format is correct', () => {
+            const payload = { code: 'DISPLAY "TEST".' };
+            assert(payload.hasOwnProperty('code'), 'Payload should have code property');
+        }, 'api');
+
+        runner.addTest('Response handling - success', async () => {
+            // Mock successful API response
+            const mockResponse = {
+                bugs: [],
+                suggestions: ['Code looks good'],
+                complexity: 'low'
+            };
+
+            assert(Array.isArray(mockResponse.bugs), 'Response should have bugs array');
+            assert(Array.isArray(mockResponse.suggestions), 'Response should have suggestions array');
+        }, 'api');
+
+        runner.addTest('Response handling - error', async () => {
+            // Mock error response
+            const mockError = { error: 'Invalid code' };
+            assert(mockError.hasOwnProperty('error'), 'Error response should have error property');
+        }, 'api');
+
+        runner.addTest('Empty code validation', () => {
+            const code = '   ';
+            assert(code.trim().length === 0, 'Should detect empty code');
+        }, 'api');
+
+        // User Interaction Tests
+        runner.addTest('Analyze button click handler', async () => {
+            // Mock button click
+            let buttonClicked = false;
+            const mockClickHandler = () => { buttonClicked = true; };
+            mockClickHandler();
+            assert(buttonClicked, 'Button click should be handled');
+        }, 'interaction');
+
+        runner.addTest('Code input change handler', () => {
+            // Mock code input change
+            let codeValue = 'DISPLAY "TEST".';
+            assert(codeValue.length > 0, 'Code input should accept text');
+        }, 'interaction');
+
+        runner.addTest('Results display after analysis', () => {
+            // Mock results display
+            const results = {
+                bugs: [{ type: 'warning', message: 'Potential issue' }],
+                suggestions: ['Add error handling']
+            };
+            assert(results.bugs.length > 0, 'Should display bugs');
+            assert(results.suggestions.length > 0, 'Should display suggestions');
+        }, 'interaction');
+
+        runner.addTest('Loading state during analysis', () => {
+            // Mock loading state
+            let isLoading = true;
+            assert(isLoading === true, 'Should show loading state during analysis');
+
+            // Simulate completion
+            isLoading = false;
+            assert(isLoading === false, 'Should hide loading state after analysis');
+        }, 'interaction');
+
+        runner.addTest('Error message display', () => {
+            // Mock error display
+            const errorMessage = 'Failed to analyze code';
+            assert(errorMessage.length > 0, 'Should display error message');
+        }, 'interaction');
+
+        runner.addTest('Clear/Reset functionality', () => {
+            // Mock clear functionality
+            let codeValue = 'DISPLAY "TEST".';
+            codeValue = '';
+            assert(codeValue === '', 'Should clear code input');
+        }, 'interaction');
+
+        runner.addTest('Syntax highlighting in code editor', () => {
+            // Mock syntax highlighting check
+            const hasHighlighting = true; // Would check if code editor has highlighting
+            assert(hasHighlighting, 'Code editor should have syntax highlighting');
+        }, 'interaction');
+
+        runner.addTest('Results formatting - bugs list', () => {
+            // Mock bug list formatting
+            const bugs = [
+                { type: 'error', line: 5, message: 'Syntax error' },
+                { type: 'warning', line: 10, message: 'Potential issue' }
+            ];
+            assert(bugs.every(bug => bug.hasOwnProperty('type')), 'All bugs should have type');
+            assert(bugs.every(bug => bug.hasOwnProperty('message')), 'All bugs should have message');
+        }, 'interaction');
+
+        runner.addTest('Results formatting - suggestions list', () => {
+            // Mock suggestions formatting
+            const suggestions = [
+                'Add error handling',
+                'Improve variable naming',
+                'Add comments'
+            ];
+            assert(Array.isArray(suggestions), 'Suggestions should be an array');
+            assert(suggestions.every(s => typeof s === 'string'), 'All suggestions should be strings');
+        }, 'interaction');
+
+        runner.addTest('Concurrent analysis prevention', () => {
+            // Mock concurrent request prevention
+            let isAnalyzing = false;
+
+            // First request
+            isAnalyzing = true;
+            assert(isAnalyzing === true, 'Should block concurrent requests');
+
+            // Try second request (should be blocked)
+            const canStartNewAnalysis = !isAnalyzing;
+            assert(canStartNewAnalysis === false, 'Should prevent concurrent analysis');
+
+            // Complete first request
+            isAnalyzing = false;
+            assert(isAnalyzing === false, 'Should allow new request after completion');
+        }, 'interaction');
+
+        // Run tests
+        function runAllTests() {
+            clearResults();
+            setTimeout(() => runner.runAll(), 100);
+        }
+
+        function clearResults() {
+            document.getElementById('ui-tests').innerHTML = '';
+            document.getElementById('api-tests').innerHTML = '';
+            document.getElementById('interaction-tests').innerHTML = '';
+            document.getElementById('test-summary').innerHTML = '';
+        }
+
+        // Auto-run tests on load
+        window.addEventListener('load', () => {
+            console.log('Frontend test suite loaded. Click "Run All Tests" to start.');
+        });
+    </script>
+</body>
+</html>

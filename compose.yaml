@@ -1,0 +1,74 @@
+services:
+  # =============================================================
+  # LLM PROVIDER CONFIGURATION
+  # =============================================================
+  # Use LLM_PROVIDER env var to switch between providers:
+  #   docker compose up                    # Uses Vertex AI (default)
+  #   LLM_PROVIDER=ollama docker compose up  # Uses Ollama
+  # =============================================================
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      # Provider: vertex_ai (default) or ollama
+      - LLM_PROVIDER=${LLM_PROVIDER:-vertex_ai}
+      # Vertex AI settings
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID:-your-gcp-project}
+      - GCP_LOCATION=${GCP_LOCATION:-us-central1}
+      - VERTEX_MODEL=${VERTEX_MODEL:-gemini-2.0-flash-001}
+      # Ollama settings (used when LLM_PROVIDER=ollama)
+      - OLLAMA_ENDPOINT=http://host.docker.internal:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-xmainframe:latest}
+      # Flask settings
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5001:5000"  # 5001 to avoid macOS AirPlay on 5000
+    volumes:
+      # Mount GCP credentials for Vertex AI
+      - ${HOME}/.config/gcloud:/root/.config/gcloud:ro
+      # Mount projects directory for analysis
+      - ./projects:/app/projects
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      - BACKEND_URL=http://backend:5000
+
+  # =============================================================
+  # OPTIONAL: Dockerized Ollama (CPU only, slower)
+  # Uncomment if you don't have Ollama installed natively
+  # =============================================================
+  # ollama:
+  #   image: ollama/ollama
+  #   environment:
+  #     - OLLAMA_NUM_GPU=0
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+  #   ports:
+  #     - "11434:11434"
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "ollama list || exit 1"]
+  #     interval: 10s
+  #     timeout: 10s
+  #     retries: 10
+  #     start_period: 30s
+
+# volumes:
+#   ollama_data:
