@@ -400,4 +400,4 @@ MIT License - feel free to use and modify as needed.
 
 ---
 
-**Built with ❤️ for COBOL developers and maintainers**
+Built and open sourced by [Hive Agents](https://www.hiveagents.dev) — AI-powered tools for legacy code modernization.
